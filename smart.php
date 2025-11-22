@@ -78,22 +78,4 @@ usort($hasil, function($a, $b){
     return $b['nilai'] <=> $a['nilai'];
 });
 
-echo "<h2>Hasil Rekomendasi Wisata (Metode SMART)</h2>";
-echo "<table border='1' cellpadding='8'>";
-echo "<tr>
-        <th>Ranking</th>
-        <th>Nama Wisata</th>
-        <th>Nilai Akhir</th>
-      </tr>";
-
-$rank = 1;
-foreach ($hasil as $h) {
-    echo "<tr>
-            <td>".$rank++."</td>
-            <td>".$h['nama']."</td>
-            <td>".round($h['nilai'], 3)."</td>
-          </tr>";
-}
-
-echo "</table>";
 ?>
