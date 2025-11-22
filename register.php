@@ -1,38 +1,32 @@
 <?php
-session_start();
 include 'koneksi.php';
 
-if (isset($_POST['login'])) {
+if (isset($_POST['register'])) {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = $_POST['password'];
-
-    $query = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username'");
     
-    if (mysqli_num_rows($query) === 1) {
-        $data = mysqli_fetch_assoc($query);
+    $cek_user = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username'");
+    if (mysqli_num_rows($cek_user) > 0) {
+        echo "<script>alert('Username sudah terdaftar!');</script>";
+    } else {
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
         
-        if (password_verify($password, $data['password'])) {
-            
-            $_SESSION['login'] = true;
-            $_SESSION['username'] = $data['username'];
-            $_SESSION['role'] = $data['role']; 
-
-            if ($data['role'] == 'admin') {
-                header("Location: admin/dashboard.php");
-            } else {
-                header("Location: index.php");
-            }
-            exit;
+        
+        $query = "INSERT INTO users (username, password, role) VALUES ('$username', '$password_hash', 'user')";
+        
+        if (mysqli_query($conn, $query)) {
+            echo "<script>alert('Pendaftaran Berhasil! Silakan Login.'); window.location='login.php';</script>";
+        } else {
+            echo "Error: " . mysqli_error($conn);
         }
     }
-    $error = true;
 }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login Wisata Madura</title>
+    <title>Register Wisata Madura</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="bg-light">
@@ -40,14 +34,10 @@ if (isset($_POST['login'])) {
         <div class="row justify-content-center">
             <div class="col-md-4">
                 <div class="card shadow">
-                    <div class="card-header text-center bg-success text-white">
-                        <h4>Login Sistem</h4>
+                    <div class="card-header text-center bg-primary text-white">
+                        <h4>Daftar Akun</h4>
                     </div>
                     <div class="card-body">
-                        <?php if(isset($error)) : ?>
-                            <div class="alert alert-danger">Username / Password salah!</div>
-                        <?php endif; ?>
-
                         <form method="POST">
                             <div class="mb-3">
                                 <label>Username</label>
@@ -57,10 +47,10 @@ if (isset($_POST['login'])) {
                                 <label>Password</label>
                                 <input type="password" name="password" class="form-control" required>
                             </div>
-                            <button type="submit" name="login" class="btn btn-success w-100">Masuk</button>
+                            <button type="submit" name="register" class="btn btn-primary w-100">Daftar</button>
                         </form>
                         <div class="mt-3 text-center">
-                            <small>Belum punya akun? <a href="register.php">Daftar disini</a></small>
+                            <small>Sudah punya akun? <a href="login.php">Login disini</a></small>
                         </div>
                     </div>
                 </div>
