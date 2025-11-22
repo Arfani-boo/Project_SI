@@ -104,8 +104,8 @@ $query = mysqli_query($conn, "SELECT * FROM wisata");
             <?php while($row = mysqli_fetch_assoc($query)): ?>
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm border-0 hover-shadow">
-                    <img src="img/<?= $row['gambar_url']; ?>" class="card-img-top" alt="<?= $row['nama_wisata']; ?>" onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
-                    
+                    <img src="<?= trim($row['gambar_url']); ?>" class="card-img-top"
+                    onerror="this.src='https://via.placeholder.com/400x200?text=No+Image';">             
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h5 class="card-title fw-bold mb-0"><?= $row['nama_wisata']; ?></h5>
